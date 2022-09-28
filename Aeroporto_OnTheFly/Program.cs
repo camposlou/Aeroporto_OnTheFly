@@ -81,7 +81,8 @@ namespace Aeroporto_OnTheFly
                         break;
 
                     case 5:
-                        
+                        CompanhiaAerea cdtcompanhia = new CompanhiaAerea();
+                        cdtcompanhia.CadastroCompanhiaAerea();
                         break;
                     case 6:
                        

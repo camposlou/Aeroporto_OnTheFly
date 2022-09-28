@@ -19,6 +19,7 @@ namespace Aeroporto_OnTheFly
 
         public InternalControlDB banco;
 
+        public CompanhiaAerea() { }
 
         public CompanhiaAerea(string cnpj, string razaoSocial, DateTime DataAbertura, DateTime DataUltvoo, DateTime DataCadastro, char Situacao)
         {
