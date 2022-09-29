@@ -95,6 +95,12 @@ namespace Aeroporto_OnTheFly
                     Console.WriteLine("Data de abertura não pode ser futura!");
                     validacao = true;
                 }
+                if (DataAbertura > DateTime.Now.AddMonths(-6))
+                {
+                    Console.WriteLine("Não é possível cadastrar empresas com menos de 6 meses!!!");
+                    Thread.Sleep(2000);
+                   validacao = true;
+                }
             } while (validacao);
 
             DataUltVoo = DateTime.Now;
@@ -119,13 +125,12 @@ namespace Aeroporto_OnTheFly
             if (opc == 1)
             {
                 string sql = $"INSERT INTO Companhia_Aerea  (CNPJ, Razao_Social, Data_Abertura, Situacao, Data_Cadastro, Data_UltimoVoo) VALUES ('{this.CNPJ}' , " +
-                     $"'{this.RazaoSocial}', '{this.DataAbertura}', '{this.Situacao}', '{this.DataCadastro}', '{this.DataUltVoo}');";
-                banco = new InternalControlDB();
-                banco.InserirDado(sql);
+                     $"'{this.RazaoSocial}', '{this.DataAbertura}', '{this.Situacao}', '{this.DataCadastro}', '{this.DataUltVoo.ToString("dd/MM/yyyy HH:mm")}');";
+               
+                db.InserirDado(sql);
 
                 Console.WriteLine("\nGravação efetuada com sucesso! Aperte ENTER para retornar ao Menu.");
                 Console.ReadKey();
-
             }
             else
             {
@@ -188,7 +193,7 @@ namespace Aeroporto_OnTheFly
             if (opc == 1)
             {
 
-                String sql = $"SELECT CNPJ, Razao_Social, Data_Abertura, Situacao, Data_Cadastro, Data_UltimoVoo From Companhia_Aerea WHERE CNPJ=('{this.CNPJ}');";
+                String sql = $"SELECT CNPJ, Razao_Social, Data_Abertura, Situacao, Data_Cadastro, Data_UltimoVoo From Companhia_Aerea";
                 banco = new InternalControlDB();
                 banco = new InternalControlDB();
                 banco.LocalizarDadoCompanhia(sql);
@@ -258,7 +263,7 @@ namespace Aeroporto_OnTheFly
                         case 2:
                             Console.Write("\nAlterar a Data de Abertura para: ");
                             this.DataAbertura = DateTime.Parse(Console.ReadLine());
-                            sql = $"Update Companhia_Aerea Set Data_Abertura=('{this.DataAbertura}') Where CPF=('{this.CNPJ}');";
+                            sql = $"Update Companhia_Aerea Set Data_Abertura=('{this.DataAbertura}') Where CNPJ=('{this.CNPJ}');";
                             break;
                         case 3:
                             Console.WriteLine("\nSituação Atual: ");

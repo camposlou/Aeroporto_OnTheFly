@@ -25,8 +25,6 @@ namespace Aeroporto_OnTheFly
 
         public Passageiro() { }
 
-
-
         public Passageiro(string cpf, string nome, char sexo, DateTime dataNascimento, char Situacao, DateTime dataUltCompra, DateTime dataCadastro)
         {
             this.CPF = cpf;
@@ -36,8 +34,6 @@ namespace Aeroporto_OnTheFly
             this.Situacao = Situacao;
             this.DataUltCompra = dataUltCompra;
             this.DataCadastro = dataCadastro;
-
-
         }
         #region Insert Passageiro
         public void CadastroPassageiro()
@@ -64,7 +60,6 @@ namespace Aeroporto_OnTheFly
                     Console.ReadKey();
                     CPF = "";
                 }
-
 
             } while (!ValidarCPF(CPF));
 
@@ -139,21 +134,17 @@ namespace Aeroporto_OnTheFly
             {
                 string sql = $"INSERT INTO Passageiro (CPF, Nome, Sexo, Data_Nascimento, Situacao, Data_UltimaCompra, Data_Cadastro) VALUES ('{this.CPF}' , " +
                      $"'{this.Nome}', '{this.Sexo}', '{this.DataNasc}', '{this.Situacao}', '{this.DataUltCompra}', '{this.DataCadastro}');";
-                banco = new InternalControlDB();
-                banco.InserirDado(sql);
+                db.InserirDado(sql);
 
                 Console.WriteLine("\nGravação efetuada com sucesso! Aperte ENTER para retornar ao Menu.");
                 Console.ReadKey();
-
             }
             else
             {
                 Console.WriteLine("\nGravação não efetuada! Aperte ENTER para retornar ao Menu.");
                 Console.ReadKey();
-
             }
-            #endregion
-           
+            #endregion          
 
         }
         #endregion

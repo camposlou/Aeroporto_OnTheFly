@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.SqlClient;
+using System.Runtime;
 
 namespace Aeroporto_OnTheFly
 {
@@ -25,7 +26,7 @@ namespace Aeroporto_OnTheFly
                 Console.WriteLine("|  2 - Selecionar Passageiro Específico:              |");
                 Console.WriteLine("|  3 - Exibir Lista de Passageiro:                    |");
                 Console.WriteLine("|  4 - Alterar dados de Passageiros:                  |");
-                Console.WriteLine("|_____________________________________________________|");
+                Console.WriteLine("|_____________________________________________________|");                
                 Console.WriteLine("|>>>>>>>>>>>>>>> MENU COMPANHIA AÉREA <<<<<<<<<<<<<<<<|");
                 Console.WriteLine("|                                                     |");
                 Console.WriteLine("|  5 - Cadastrar Companhia Aérea:                     |");
@@ -39,13 +40,17 @@ namespace Aeroporto_OnTheFly
                 Console.WriteLine("|  10- Selecionar Aeronave Específica:                |");
                 Console.WriteLine("|  11- Exibir Lista de Aeronaves:                     |");
                 Console.WriteLine("|  12- Alterar dados de Aeronave:                     |");
+                Console.WriteLine("|  13- Cadastrar Voo:                                 |");
                 Console.WriteLine("|_____________________________________________________|");
+                Console.WriteLine("|>>>>>>>>>>>>>>>>>>> MENU OPERAÇÕES <<<<<<<<<<<<<<<<<<|");
                 Console.WriteLine("|                                                     |");
-                Console.WriteLine("|                                                     |");
+                Console.WriteLine("|  13 - Cadastrar Voo:                                |");
+                Console.WriteLine("|  14- Selecionar Voo Específico:                     |");
+                Console.WriteLine("|  15- Exibir Lista de Vôos:                          |");
+                Console.WriteLine("|  16- Alterar dados de Voo:                          |");                
+                Console.WriteLine("|_____________________________________________________|");                
                 Console.Write("Opção: ");
-               
-              
-               
+                                           
                 try
                 {
                     opcMenu = int.Parse(Console.ReadLine());
@@ -54,7 +59,6 @@ namespace Aeroporto_OnTheFly
                 {
 
                 }
-
                 switch (opcMenu)
                 {
                     case 0:
@@ -84,18 +88,49 @@ namespace Aeroporto_OnTheFly
                         CompanhiaAerea cdtcompanhia = new CompanhiaAerea();
                         cdtcompanhia.CadastroCompanhiaAerea();
                         break;
+
                     case 6:
-                       
-                                             
+                        CompanhiaAerea selcompanhia = new CompanhiaAerea();
+                        selcompanhia.LocalizarCompanhiaAerea();
                         break;
-                    case 7:
-                       
-
-                        break;
-                    case 8:
                         
+                    case 7:
+                        CompanhiaAerea exibcompanhia = new CompanhiaAerea();
+                        exibcompanhia.ConsultarListaCompanhia();
                         break;
 
+                    case 8:
+                        CompanhiaAerea altcompanhia = new CompanhiaAerea();
+                        altcompanhia.EditarCompanhia();
+                        break;
+
+                    case 9:
+                        Aeronave cdtaeronave = new Aeronave();
+                        cdtaeronave.CadastroAeronave();
+                        break;
+
+                    case 10:
+                        Aeronave selaeronave = new Aeronave();
+                        selaeronave.LocalizarAeronave();
+                        break;
+
+                    case 11:
+                        Aeronave exibaeronave = new Aeronave();
+                        exibaeronave.ConsultarListaAeronave();
+                        break;
+
+                    case 12:
+                        Aeronave altaeronave = new Aeronave();
+                        altaeronave.EditarAeronave();
+                        break;
+
+                    case 13:
+                        Voo cdtvoo = new Voo();
+                        cdtvoo.CadastroVoo();
+                        break;
+                    case 14:
+
+                        break;
                 }
 
             } while (true);
