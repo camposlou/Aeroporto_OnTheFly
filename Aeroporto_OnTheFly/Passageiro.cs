@@ -200,7 +200,7 @@ namespace Aeroporto_OnTheFly
             if (opc == 1)
             {
                 
-                String sql = $"SELECT CPF,Nome, Sexo, Data_Nascimento, Situacao, Data_UltimaCompra, Data_Cadastro  FROM Passageiro";
+                String sql = $"SELECT CPF,Nome, Sexo, Data_Nascimento, Situacao, Data_UltimaCompra, Data_Cadastro  FROM Passageiro WHERE Situacao = 'A';";
                 banco = new InternalControlDB();
                 banco = new InternalControlDB();
                 banco.LocalizarDadoPassageiro(sql);

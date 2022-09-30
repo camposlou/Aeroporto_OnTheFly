@@ -193,7 +193,7 @@ namespace Aeroporto_OnTheFly
             if (opc == 1)
             {
 
-                String sql = $"SELECT CNPJ, Razao_Social, Data_Abertura, Situacao, Data_Cadastro, Data_UltimoVoo From Companhia_Aerea";
+                String sql = $"SELECT CNPJ, Razao_Social, Data_Abertura, Situacao, Data_Cadastro, Data_UltimoVoo From Companhia_Aerea WHERE Situacao = 'A';";
                 banco = new InternalControlDB();
                 banco = new InternalControlDB();
                 banco.LocalizarDadoCompanhia(sql);
@@ -293,9 +293,6 @@ namespace Aeroporto_OnTheFly
             }
         }
         #endregion
-
-
-
 
         public bool ValidarCNPJ(string vrCNPJ)
         {

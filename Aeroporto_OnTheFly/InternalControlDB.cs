@@ -9,9 +9,9 @@ namespace Aeroporto_OnTheFly
 {
     internal class InternalControlDB
     {
-       private static string Conexao = "Data Source=localhost; Initial Catalog=Aeroporto_OnTheFly; User Id=sa; Password=MiliBe1@;";
-       private static SqlConnection Conecta = new SqlConnection(Conexao);
-        
+        private static string Conexao = "Data Source=localhost; Initial Catalog=Aeroporto_OnTheFly; User Id=sa; Password=MiliBe1@;";
+        private static SqlConnection Conecta = new SqlConnection(Conexao);
+
 
         public InternalControlDB() { }
 
@@ -21,7 +21,7 @@ namespace Aeroporto_OnTheFly
         }
 
         #region Insert, Select, Update
-        public void InserirDado( String sql)
+        public void InserirDado(String sql)
         {
             try
             {
@@ -38,7 +38,7 @@ namespace Aeroporto_OnTheFly
                 Console.WriteLine(ex.Message);
             }
         }
-        
+
         public String LocalizarDadoPassageiro(String sql)
         {
             String recebe = "";
@@ -62,7 +62,7 @@ namespace Aeroporto_OnTheFly
                         Console.Write($"Data de Nascimento: {reader.GetDateTime(3).ToShortDateString()}\n");
                         Console.Write($"Situação: {reader.GetString(4)}\n");
                         Console.Write($"Data da Última Compra: {reader.GetDateTime(5).ToShortDateString()}\n");
-                        Console.Write($"Data de Cadastro: {reader.GetDateTime(6).ToShortDateString()}\n");                                      
+                        Console.Write($"Data de Cadastro: {reader.GetDateTime(6).ToShortDateString()}\n");
 
                         Console.WriteLine("\n");
                     }
@@ -99,13 +99,13 @@ namespace Aeroporto_OnTheFly
                         Console.Write($"Data de Abertura: {reader.GetDateTime(2).ToShortDateString()}\n");
                         Console.Write($"Situação: {reader.GetString(3)}\n");
                         Console.Write($"Data Cadastro: {reader.GetDateTime(5).ToShortDateString()}\n");
-                        Console.Write($"Data do Último Voo: {reader.GetDateTime(5).ToShortDateString()}\n");                        
+                        Console.Write($"Data do Último Voo: {reader.GetDateTime(5).ToShortDateString()}\n");
 
                         Console.WriteLine("\n");
                     }
                 }
                 Conecta.Close();
-                
+
             }
             catch (SqlException ex)
             {
@@ -118,7 +118,7 @@ namespace Aeroporto_OnTheFly
             String recebe = "";
             try
             {
-                Conecta.Open(); 
+                Conecta.Open();
 
                 SqlCommand cmd = new SqlCommand(sql, Conecta);
                 cmd.Connection = Conecta;
@@ -162,14 +162,14 @@ namespace Aeroporto_OnTheFly
                 SqlDataReader reader = null;
 
                 using (reader = cmd.ExecuteReader())
-                {                    
+                {
                     Console.WriteLine("\n\t>>> Voo(s) Localizada(s) <<<\n");
                     while (reader.Read())
                     {
                         recebe = reader.GetString(0);
                         Console.Write($"IDVoo: {reader.GetString(0)}\n");
                         Console.Write($"Inscrição: {reader.GetString(1)}\n");
-                        Console.Write($"Iata: {reader.GetDateTime(2).ToShortDateString()}\n");                        
+                        Console.Write($"Iata: {reader.GetDateTime(2).ToShortDateString()}\n");
                         Console.Write($"Data Cadastro: {reader.GetDateTime(3).ToShortDateString()}\n");
                         Console.Write($"Situação: {reader.GetString(4)}\n");
                         Console.Write($"Assentos Ocupados: {reader.GetInt32(5)}\n");
@@ -185,36 +185,38 @@ namespace Aeroporto_OnTheFly
                 Console.WriteLine(ex.Message);
             }
             return recebe;
-        }
-        /*public void LocalizarAtivoseInativos()
-        {      
-                        
-               Conecta.Open();                
-               SqlCommand cmd = new SqlCommand();
-               cmd.CommandText = "SELECT p.CPF, p.Nome, ca.CNPJ, ca.Razao_Social, aer.Inscricao, aer.Capacidade From Passageiro p, Companhia_Aerea ca, Aeronave aer WHERE Situacao = 'A';";
-               cmd.Connection = Conecta;            
-                using (SqlDataReader reader = cmd.ExecuteReader())
+        }     
+
+        public String LocalizarIATAS(String sql)
+        {
+            String recebe = "";
+            try
+            {
+                Conecta.Open();
+                SqlCommand cmd = new SqlCommand(sql, Conecta);
+                cmd.Connection = Conecta;
+                SqlDataReader reader = null;
+
+
+                using (reader = cmd.ExecuteReader())
                 {
-                    Console.WriteLine("\n\t>>> Cadastro(s) Ativo(s) Localizada(s) <<<\n");
+                    Console.WriteLine("\n\t>>> Iata(s) Localizada(s) <<<\n");
                     while (reader.Read())
                     {
-                        Console.WriteLine("PASSAGEIRO");
-                        Console.Write($"CPF: {reader.GetString(0)}");
-                        Console.WriteLine($"Nome: {reader.GetString(1)}\n");
-                        Console.WriteLine("COMPANHIA AÉREA");
-                        Console.WriteLine($"CNPJ: {reader.GetString(2)}");
-                        Console.WriteLine($"Razão Social: {reader.GetString(3)}\n");
-                        Console.WriteLine("AERONAVE");
-                        Console.WriteLine($"Inscrição: {reader.GetString(4)}");
-                        Console.WriteLine($"Capacidade: {reader.GetInt32(5)}\n");                        
+                        recebe = reader.GetString(0);
+                        Console.Write($"Iata: {reader.GetString(0)}");
+                        Console.WriteLine($" Destino: {reader.GetString(1)}");
                     }
                 }
-            cmd.ExecuteNonQuery();
-            Conecta.Close();          
-            
-        }*/
-
-        public void EditarDado( String sql)
+                Conecta.Close();
+            }
+            catch (SqlException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return recebe;
+        }
+        public void EditarDado(String sql)
         {
             try
             {
@@ -273,7 +275,7 @@ namespace Aeroporto_OnTheFly
             string dadoTratado = dado.Replace(".", "").Replace("-", "").Replace("'", "").Replace("]", "").Replace("[", "");
             return dadoTratado;
         }
-        
+
 
     }
 }

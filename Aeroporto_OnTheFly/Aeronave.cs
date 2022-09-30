@@ -140,7 +140,7 @@ namespace Aeroporto_OnTheFly
             if (opc == 1)
             {
 
-                String sql = $"SELECT Inscricao, CNPJ, Capacidade, Situacao, Data_Cadastro, Data_UltimaVenda From Aeronave";
+                String sql = $"SELECT Inscricao, CNPJ, Capacidade, Situacao, Data_Cadastro, Data_UltimaVenda From Aeronave WHERE Situacao = 'A';";
                 banco = new InternalControlDB();
                 banco.LocalizarDadoAeronave(sql);
 

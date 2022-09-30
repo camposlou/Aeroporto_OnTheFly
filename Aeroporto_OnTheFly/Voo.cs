@@ -17,7 +17,7 @@ namespace Aeroporto_OnTheFly
         public int AssentosOcup { get; set; }
         public char Situacao { get; set; }
 
-        public InternalControlDB banco;      
+        public InternalControlDB banco;
 
         public Voo() { }
 
@@ -27,50 +27,47 @@ namespace Aeroporto_OnTheFly
             this.Iatas = iatas;
             this.Inscricao = inscricao;
             this.DataHoraVoo = dataHoraVoo;
-            this.AssentosOcup = assentosocup; 
-            this.Situacao = situacao; 
+            this.AssentosOcup = assentosocup;
+            this.Situacao = situacao;
         }
         #region Insert Voo
         public void CadastroVoo()
         {
             InternalControlDB db = new InternalControlDB();
 
-            Console.WriteLine("\n>>>DIGITE AS INFORMAÇÕES DA VOO ABAIXO<<<:\n ");
+            Console.WriteLine("\n>>>DIGITE AS INFORMAÇÕES DA VOO ABAIXO<<<: ");
 
-            Console.WriteLine("Número do ID do Voo: ");
-            IDVoo = Console.ReadLine();
-            bool verifica = db.VerifExistente(IDVoo, "IDVoo", "Voo");
-            if (verifica)
-            {
-                Console.WriteLine("Voo Já cadastrado!!!");
-                Console.ReadLine();
-                IDVoo = "";
-            }            
-
-            Console.WriteLine("\n\t>>> Escolha a Aeronave(s) Abaixo: <<<");                    
+            while (true)
+            {              
+                
+                Random random = new Random();
+                IDVoo = "V" + random.Next(0001, 9999).ToString("0000");
+                
+                if (db.VerifExistente(IDVoo, "IDVoo", "Voo"))
+                {
+                    Console.WriteLine("Voo Já cadastrado!!!");
+                    Thread.Sleep(2000);
+                }
+                else
+                {
+                    break;
+                }
+            }           
+            Console.WriteLine("\n\t>>> Escolha a Aeronave(s) Abaixo: <<<");
             String sql = $"SELECT Inscricao, CNPJ, Capacidade, Situacao, Data_Cadastro, Data_UltimaVenda From Aeronave WHERE Situacao = 'A'; ";
             db.LocalizarDadoAeronave(sql);
             Console.WriteLine("Inscrição da Aeronave selecionada: ");
             Inscricao = Console.ReadLine();
 
-           Console.WriteLine("\n\t>>> Escolha o IATA/Destino Abaixo: <<<");
-            db.AbrirConexao() ;
-            SqlCommand cmd = new SqlCommand();
-            cmd.CommandText = "SELECT Iatas, Cidade From Destino";
-            using(SqlDataReader reader = cmd.ExecuteReader())
-            {
-                while (reader.Read())
-                {
-                    Console.WriteLine();
-                    Console.WriteLine($"Iata: {reader.GetString(0)}");
-                    Console.WriteLine($"Cidade: {reader.GetString(1)}");
-
-                }
-            }
-            Console.WriteLine("Digite Destino/IATA desejado : ");
+            Console.WriteLine("\n\t>>> Escolha o Destino(s) Abaixo: <<<");
+            sql = $"SELECT Iata, Destino From IATAS";
+            db.LocalizarIATAS(sql);
+            Console.WriteLine("\nDigite IATA desejada : ");
             Iatas = Console.ReadLine();
+
             DataHoraVoo = DateTime.Now;
             AssentosOcup = 0;
+
             do
             {
                 Console.Write("Situação do Voo [A] Ativo [C] Cancelado: ");
@@ -92,10 +89,11 @@ namespace Aeroporto_OnTheFly
             {
                 sql = $"INSERT INTO Voo (IDVoo, Inscricao, Iatas, Data_HoraVoo, Situacao, Assentos_Ocupados) VALUES ('{this.IDVoo}' , " +
                      $"'{this.Inscricao}', '{this.Iatas}', '{this.DataHoraVoo}', '{this.Situacao}', '{this.AssentosOcup}');";
-                
+
                 db.InserirDado(sql);
 
                 Console.WriteLine("\nGravação efetuada com sucesso! Aperte ENTER para retornar ao Menu.");
+               // Passagem (Paramos Aqui!!!!!!!)
                 Console.ReadKey();
 
             }
@@ -103,20 +101,18 @@ namespace Aeroporto_OnTheFly
             {
                 Console.WriteLine("\nGravação não efetuada! Aperte ENTER para retornar ao Menu.");
                 Console.ReadKey();
-
             }
             #endregion
-
         }
         #endregion
 
         #region Select Voo Especifico
-        public void LocalizarAeronave()
+        public void LocalizarVoo()
         {
             Console.Clear();
             Console.WriteLine("\n\t>>> Localizar Voo Especifico <<<");
-            Console.Write("\nDigite o ID do Voo: ");
-            this.Inscricao = Console.ReadLine();
+            Console.Write("\nDigite o ID do Voo: ");//????????????????
+            this.IDVoo = Console.ReadLine();//??????????????????????
 
             Console.WriteLine("\nDeseja Continuar? Digite 1- Sim / 2-Não: ");
             Console.Write("Digite: ");
@@ -130,15 +126,12 @@ namespace Aeroporto_OnTheFly
 
                 Console.WriteLine("\nAperte ENTER para Retornar ao Menu.");
                 Console.ReadKey();
-
             }
             else
             {
                 Console.WriteLine("\nNÃO foi possível acionar a localização do voo! Aperte ENTER para retornar ao Menu.");
                 Thread.Sleep(2000);
-
             }
-
         }
         #endregion
 
@@ -154,7 +147,7 @@ namespace Aeroporto_OnTheFly
             if (opc == 1)
             {
 
-                String sql = $"SELECT IDVoo, Inscricao, Iatas, Data_HoraVoo, Situacao, Assentos_Ocupados From Voo WHERE IDVoo=('{this.IDVoo}');";
+                String sql = $"SELECT IDVoo, Inscricao, Iatas, Data_HoraVoo, Situacao, Assentos_Ocupados From Voo WHERE Situacao = 'A';";
                 banco = new InternalControlDB();
                 banco.LocalizarDadoVoo(sql);
 
@@ -165,9 +158,7 @@ namespace Aeroporto_OnTheFly
             {
                 Console.WriteLine("\nNÃO foi possível acionar a consulta dod vôos! Aperte ENTER para retornar ao Menu.");
 
-
             }
-
         }
         #endregion
 
@@ -178,8 +169,8 @@ namespace Aeroporto_OnTheFly
             String sql = "";
             Console.Clear();
             Console.WriteLine("\n\t>>> Editar Dados do Voo <<<");
-            Console.Write("\nDigite a ID do Voo: ");
-            this.Inscricao = Console.ReadLine();
+            Console.Write("\nDigite a ID do Voo: ");//????????????????????????????
+            this.IDVoo = Console.ReadLine();//???????????????????????????????????
 
             sql = $"SELECT IDVoo, Inscricao, Iatas, Data_HoraVoo, Situacao, Assentos_Ocupados From Voo WHERE IDVoo=('{this.IDVoo}');";
             banco = new InternalControlDB();
@@ -194,7 +185,7 @@ namespace Aeroporto_OnTheFly
                 {
                     Console.WriteLine("\nSelecione a opção que deseja editar");
                     Console.WriteLine("1-Iata");
-                    Console.WriteLine("2-Data/Hora Voo");
+                    Console.WriteLine("2-Data/Hora Voo");//????????????????????????????
                     Console.WriteLine("3-Situação");
                     Console.WriteLine("4-Assentos Ocupados: ");
                     Console.Write("\nDigite: ");
@@ -206,7 +197,6 @@ namespace Aeroporto_OnTheFly
                         opc = int.Parse(Console.ReadLine());
 
                     }
-
                     switch (opc)
                     {
                         case 1:
@@ -236,7 +226,6 @@ namespace Aeroporto_OnTheFly
                     banco = new InternalControlDB();
                     banco.EditarDado(sql);
                 }
-
                 else
                 {
                     Console.WriteLine("\nNÃO foi possível acionar a operação editar cadastro! Aperte ENTER para retornar ao Menu.");

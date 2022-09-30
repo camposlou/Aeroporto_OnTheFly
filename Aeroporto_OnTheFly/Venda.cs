@@ -19,11 +19,15 @@ namespace Aeroporto_OnTheFly
         }
         public void Cadastro()
         {
-            //InternalControlDB db = new InternalControlDB();
+            InternalControlDB db = new InternalControlDB();
             Console.WriteLine("\n>>>DIGITE AS INFORMAÇÕES DA VENDA ABAIXO<<<:\n ");
 
-            Console.WriteLine("CPF do Passageiro: ");
+            Console.WriteLine("\n\t>>> Escolha o(s) Passageiro(s) Abaixo: <<<");
+            String sql = $"SELECT CPF, Nome, Sexo, Data_Nascimento, Situacao, Data_UltimaCompra, Data_Cadastro From Passageiro WHERE Situacao = 'A';";
+            db.LocalizarDadoPassageiro(sql);            
+            Console.Write("Digite o CPF do Passageiro selecionado: ");
             CPF = Console.ReadLine();
+
             DataVenda = DateTime.Now;
             Console.WriteLine("Valor Total: ");
             ValorTotal = float.Parse(Console.ReadLine());
