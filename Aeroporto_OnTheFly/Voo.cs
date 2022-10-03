@@ -17,7 +17,7 @@ namespace Aeroporto_OnTheFly
         public int AssentosOcup { get; set; }
         public char Situacao { get; set; }
 
-        public InternalControlDB banco;
+        InternalControlDB db = new();        
 
         public Voo() { }
 
@@ -33,16 +33,15 @@ namespace Aeroporto_OnTheFly
         #region Insert Voo
         public void CadastroVoo()
         {
-            InternalControlDB db = new InternalControlDB();
-
-            Console.WriteLine("\n>>>DIGITE AS INFORMAÇÕES DA VOO ABAIXO<<<: ");
+            
+            Console.WriteLine("\n>>> CADASTRO DE VOO: <<<\n ");
 
             while (true)
-            {              
-                
+            {
+
                 Random random = new Random();
                 IDVoo = "V" + random.Next(0001, 9999).ToString("0000");
-                
+
                 if (db.VerifExistente(IDVoo, "IDVoo", "Voo"))
                 {
                     Console.WriteLine("Voo Já cadastrado!!!");
@@ -52,7 +51,8 @@ namespace Aeroporto_OnTheFly
                 {
                     break;
                 }
-            }           
+            }
+            Console.WriteLine($"O ID do seu Voo {this.IDVoo}\n");
             Console.WriteLine("\n\t>>> Escolha a Aeronave(s) Abaixo: <<<");
             String sql = $"SELECT Inscricao, CNPJ, Capacidade, Situacao, Data_Cadastro, Data_UltimaVenda From Aeronave WHERE Situacao = 'A'; ";
             db.LocalizarDadoAeronave(sql);
@@ -60,6 +60,7 @@ namespace Aeroporto_OnTheFly
             Inscricao = Console.ReadLine();
 
             Console.WriteLine("\n\t>>> Escolha o Destino(s) Abaixo: <<<");
+
             sql = $"SELECT Iata, Destino From IATAS";
             db.LocalizarIATAS(sql);
             Console.WriteLine("\nDigite IATA desejada : ");
@@ -87,13 +88,12 @@ namespace Aeroporto_OnTheFly
 
             if (opc == 1)
             {
-                sql = $"INSERT INTO Voo (IDVoo, Inscricao, Iatas, Data_HoraVoo, Situacao, Assentos_Ocupados) VALUES ('{this.IDVoo}' , " +
+                sql = $"INSERT INTO Voo (IDVoo, Inscricao_Aero, Iatas, Data_HoraVoo, Situacao, Assentos_Ocupados) VALUES ('{this.IDVoo}' , " +
                      $"'{this.Inscricao}', '{this.Iatas}', '{this.DataHoraVoo}', '{this.Situacao}', '{this.AssentosOcup}');";
 
                 db.InserirDado(sql);
 
                 Console.WriteLine("\nGravação efetuada com sucesso! Aperte ENTER para retornar ao Menu.");
-               // Passagem (Paramos Aqui!!!!!!!)
                 Console.ReadKey();
 
             }
@@ -109,10 +109,11 @@ namespace Aeroporto_OnTheFly
         #region Select Voo Especifico
         public void LocalizarVoo()
         {
+
             Console.Clear();
             Console.WriteLine("\n\t>>> Localizar Voo Especifico <<<");
-            Console.Write("\nDigite o ID do Voo: ");//????????????????
-            this.IDVoo = Console.ReadLine();//??????????????????????
+            Console.Write("\nDigite a Inscrição da Aeronave: ");
+            this.Inscricao = Console.ReadLine();
 
             Console.WriteLine("\nDeseja Continuar? Digite 1- Sim / 2-Não: ");
             Console.Write("Digite: ");
@@ -120,9 +121,9 @@ namespace Aeroporto_OnTheFly
 
             if (opc == 1)
             {
-                String sql = $"SELECT IDVoo, Inscricao, Iatas, Data_HoraVoo, Situacao, Assentos_Ocupados From Voo WHERE IDVoo=('{this.IDVoo}');";
-                banco = new InternalControlDB();
-                banco.LocalizarDadoVoo(sql);
+                String sql = $"SELECT IDVoo, Inscricao_Aero, Iatas, Data_HoraVoo, Situacao, Assentos_Ocupados From Voo WHERE Inscricao_Aero=('{this.Inscricao}');";
+                
+                db.LocalizarDadoVoo(sql);
 
                 Console.WriteLine("\nAperte ENTER para Retornar ao Menu.");
                 Console.ReadKey();
@@ -136,7 +137,7 @@ namespace Aeroporto_OnTheFly
         #endregion
 
         #region Select Lista de Vôos
-        public void ConsultarListaVôos()
+        public void ConsultarListaVoos()
         {
             Console.Clear();
             Console.WriteLine("\n\t>>> Lista de Voo(s) <<<");
@@ -147,16 +148,16 @@ namespace Aeroporto_OnTheFly
             if (opc == 1)
             {
 
-                String sql = $"SELECT IDVoo, Inscricao, Iatas, Data_HoraVoo, Situacao, Assentos_Ocupados From Voo WHERE Situacao = 'A';";
-                banco = new InternalControlDB();
-                banco.LocalizarDadoVoo(sql);
+                String sql = $"SELECT IDVoo, Inscricao_Aero, Iatas, Data_HoraVoo, Situacao, Assentos_Ocupados From Voo WHERE Situacao = 'A';";
+              
+                db.LocalizarDadoVoo(sql);
 
                 Console.WriteLine("\nAperte ENTER para retornar ao Menu.");
                 Console.ReadKey();
             }
             else
             {
-                Console.WriteLine("\nNÃO foi possível acionar a consulta dod vôos! Aperte ENTER para retornar ao Menu.");
+                Console.WriteLine("\nNÃO foi possível acionar a consulta do(s) voo(s)! Aperte ENTER para retornar ao Menu.");
 
             }
         }
@@ -169,13 +170,13 @@ namespace Aeroporto_OnTheFly
             String sql = "";
             Console.Clear();
             Console.WriteLine("\n\t>>> Editar Dados do Voo <<<");
-            Console.Write("\nDigite a ID do Voo: ");//????????????????????????????
-            this.IDVoo = Console.ReadLine();//???????????????????????????????????
+            Console.Write("\nDigite a ID do Voo: ");
+            this.IDVoo = Console.ReadLine();
 
-            sql = $"SELECT IDVoo, Inscricao, Iatas, Data_HoraVoo, Situacao, Assentos_Ocupados From Voo WHERE IDVoo=('{this.IDVoo}');";
-            banco = new InternalControlDB();
+            sql = $"SELECT IDVoo, Inscricao_Aero, Iatas, Data_HoraVoo, Situacao, Assentos_Ocupados From Voo WHERE IDVoo=('{this.IDVoo}');";
+            db = new InternalControlDB();
 
-            if (!string.IsNullOrEmpty(banco.LocalizarDadoVoo(sql)))
+            if (!string.IsNullOrEmpty(db.LocalizarDadoVoo(sql)))
             {
                 Console.WriteLine("\nDeseja Efetuar a Alteração? Digite 1- Sim / 2- Não: ");
                 Console.Write("Digite: ");
@@ -185,7 +186,7 @@ namespace Aeroporto_OnTheFly
                 {
                     Console.WriteLine("\nSelecione a opção que deseja editar");
                     Console.WriteLine("1-Iata");
-                    Console.WriteLine("2-Data/Hora Voo");//????????????????????????????
+                    Console.WriteLine("2-Data/Hora Voo");
                     Console.WriteLine("3-Situação");
                     Console.WriteLine("4-Assentos Ocupados: ");
                     Console.Write("\nDigite: ");
@@ -200,7 +201,10 @@ namespace Aeroporto_OnTheFly
                     switch (opc)
                     {
                         case 1:
-                            Console.Write("\nAlterar o Iata para: ");
+                            sql = $"SELECT Iata, Destino From IATAS";
+                            db.LocalizarIATAS(sql);
+                            Console.WriteLine();
+                            Console.Write("\nAlterar a Iata para: ");
                             this.Iatas = Console.ReadLine();
                             sql = $"Update Voo Set Iatas=('{this.Iatas}') Where IDVoo=('{this.IDVoo}');";
                             break;
@@ -223,8 +227,8 @@ namespace Aeroporto_OnTheFly
                     }
                     Console.WriteLine("\nCadastro alterado com sucesso!!!! Aperte ENTER para retornar ao Menu.");
                     Console.ReadKey();
-                    banco = new InternalControlDB();
-                    banco.EditarDado(sql);
+                    db = new InternalControlDB();
+                    db.EditarDado(sql);
                 }
                 else
                 {
@@ -237,8 +241,15 @@ namespace Aeroporto_OnTheFly
                 Console.WriteLine("\nVoo Não Encontrado! Aperte ENTER para retornar ao Menu.");
                 Console.ReadKey();
             }
+           
         }
         #endregion
+
+        
+
+
+        
+
 
     }
 }

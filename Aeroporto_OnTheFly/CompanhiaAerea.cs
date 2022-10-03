@@ -17,7 +17,7 @@ namespace Aeroporto_OnTheFly
         public DateTime DataCadastro { get; set; }
         public char Situacao { get; set; }
 
-        public InternalControlDB banco;
+        InternalControlDB db = new();        
 
         public CompanhiaAerea() { }
 
@@ -33,7 +33,7 @@ namespace Aeroporto_OnTheFly
         #region Insert Companhia Aerea
         public void CadastroCompanhiaAerea()
         {
-            InternalControlDB db = new InternalControlDB();
+            
             Console.Clear();
 
             Console.WriteLine("\n\t>>>DIGITE AS INFORMAÇÕES DA COMPANHIA AÉREA ABAIXO<<<:\n ");
@@ -164,8 +164,8 @@ namespace Aeroporto_OnTheFly
             if (opc == 1)
             {
                 String sql = $"SELECT CNPJ, Razao_Social, Data_Abertura, Situacao, Data_Cadastro, Data_UltimoVoo From Companhia_Aerea WHERE CNPJ=('{this.CNPJ}');";
-                banco = new InternalControlDB();
-                banco.LocalizarDadoCompanhia(sql);
+              
+                db.LocalizarDadoCompanhia(sql);
 
                 Console.WriteLine("\nAperte ENTER para Retornar ao Menu.");
                 Console.ReadKey();
@@ -193,10 +193,9 @@ namespace Aeroporto_OnTheFly
             if (opc == 1)
             {
 
-                String sql = $"SELECT CNPJ, Razao_Social, Data_Abertura, Situacao, Data_Cadastro, Data_UltimoVoo From Companhia_Aerea WHERE Situacao = 'A';";
-                banco = new InternalControlDB();
-                banco = new InternalControlDB();
-                banco.LocalizarDadoCompanhia(sql);
+                String sql = $"SELECT CNPJ, Razao_Social, Data_Abertura, Situacao, Data_Cadastro, Data_UltimoVoo From Companhia_Aerea";
+               
+                db.LocalizarDadoCompanhia(sql);
 
                 Console.WriteLine("\nAperte ENTER para retornar ao Menu.");
                 Console.ReadKey();
@@ -229,9 +228,9 @@ namespace Aeroporto_OnTheFly
             }
 
             sql = $"SELECT CNPJ, Razao_Social, Data_Abertura, Situacao, Data_Cadastro, Data_UltimoVoo From Companhia_Aerea WHERE CNPJ=('{this.CNPJ}');";
-            banco = new InternalControlDB();
+            db = new InternalControlDB();
 
-            if (!string.IsNullOrEmpty(banco.LocalizarDadoCompanhia(sql)))
+            if (!string.IsNullOrEmpty(db.LocalizarDadoCompanhia(sql)))
             {
                 Console.WriteLine("\nDeseja Efetuar a Alteração? Digite 1- Sim / 2- Não: ");
                 Console.Write("Digite: ");
@@ -276,8 +275,8 @@ namespace Aeroporto_OnTheFly
                     }
                     Console.WriteLine("\nCadastro alterado com sucesso!!!! Aperte ENTER para retornar ao Menu.");
                     Console.ReadKey();
-                    banco = new InternalControlDB();
-                    banco.EditarDado(sql);
+                    db = new InternalControlDB();
+                    db.EditarDado(sql);
                 }
 
                 else

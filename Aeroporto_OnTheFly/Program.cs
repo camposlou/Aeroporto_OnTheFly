@@ -9,11 +9,9 @@ namespace Aeroporto_OnTheFly
         static void MenuPrincipal()
         {
             do
-            {
-                InternalControlDB cnx = new InternalControlDB();
-                SqlConnection conexaosql = new SqlConnection(cnx.AbrirConexao());
+            {               
 
-                int opcMenu = 9;
+                int opcMenu = 16;
                 Console.Clear();
                 Console.WriteLine();
                 Console.WriteLine("*** >>> BEM VINDO AO NOSSO AEROPORTO ON THE FLY <<< ***");
@@ -26,7 +24,7 @@ namespace Aeroporto_OnTheFly
                 Console.WriteLine("|  2 - Selecionar Passageiro Específico:              |");
                 Console.WriteLine("|  3 - Exibir Lista de Passageiro:                    |");
                 Console.WriteLine("|  4 - Alterar dados de Passageiros:                  |");
-                Console.WriteLine("|_____________________________________________________|");                
+                Console.WriteLine("|_____________________________________________________|");
                 Console.WriteLine("|>>>>>>>>>>>>>>> MENU COMPANHIA AÉREA <<<<<<<<<<<<<<<<|");
                 Console.WriteLine("|                                                     |");
                 Console.WriteLine("|  5 - Cadastrar Companhia Aérea:                     |");
@@ -39,18 +37,14 @@ namespace Aeroporto_OnTheFly
                 Console.WriteLine("|  9 - Cadastrar Aeronave:                            |");
                 Console.WriteLine("|  10- Selecionar Aeronave Específica:                |");
                 Console.WriteLine("|  11- Exibir Lista de Aeronaves:                     |");
-                Console.WriteLine("|  12- Alterar dados de Aeronave:                     |");
-                Console.WriteLine("|  13- Cadastrar Voo:                                 |");
+                Console.WriteLine("|  12- Alterar dados de Aeronave:                     |");               
                 Console.WriteLine("|_____________________________________________________|");
-                Console.WriteLine("|>>>>>>>>>>>>>>>>>>> MENU OPERAÇÕES <<<<<<<<<<<<<<<<<<|");
+                Console.WriteLine("|>>>>>>>>>>>>>>>>>> OPERAÇÕES DE VOO <<<<<<<<<<<<<<<<<|");
                 Console.WriteLine("|                                                     |");
-                Console.WriteLine("|  13 - Cadastrar Voo:                                |");
-                Console.WriteLine("|  14- Selecionar Voo Específico:                     |");
-                Console.WriteLine("|  15- Exibir Lista de Vôos:                          |");
-                Console.WriteLine("|  16- Alterar dados de Voo:                          |");                
-                Console.WriteLine("|_____________________________________________________|");                
+                Console.WriteLine("|  13 - Menu:                                         |");               
+                Console.WriteLine("|_____________________________________________________|");
                 Console.Write("Opção: ");
-                                           
+
                 try
                 {
                     opcMenu = int.Parse(Console.ReadLine());
@@ -65,7 +59,7 @@ namespace Aeroporto_OnTheFly
                         Environment.Exit(0);
                         break;
                     case 1:
-                        Passageiro cdtpassageiro = new Passageiro ();
+                        Passageiro cdtpassageiro = new Passageiro();
                         cdtpassageiro.CadastroPassageiro();
                         break;
 
@@ -93,7 +87,7 @@ namespace Aeroporto_OnTheFly
                         CompanhiaAerea selcompanhia = new CompanhiaAerea();
                         selcompanhia.LocalizarCompanhiaAerea();
                         break;
-                        
+
                     case 7:
                         CompanhiaAerea exibcompanhia = new CompanhiaAerea();
                         exibcompanhia.ConsultarListaCompanhia();
@@ -125,21 +119,127 @@ namespace Aeroporto_OnTheFly
                         break;
 
                     case 13:
+                        Menu();
+                        break;
+                }
+
+            } while (true);
+        }
+        static void Menu()
+        {
+            do
+            {
+                int opcMenu = 13;
+                Console.Clear();
+                Console.WriteLine();
+                Console.WriteLine("*** >>> BEM VINDO AO NOSSO AEROPORTO ON THE FLY <<< ***");
+                Console.WriteLine();
+                Console.WriteLine("|_____________________________________________________|");
+                Console.WriteLine("|>>>>>>>>>>>>>>>>>>>>>> MENU VOO <<<<<<<<<<<<<<<<<<<<<|");                
+                Console.WriteLine("|  0 - Retornar ao Menu Principal:                    |");
+                Console.WriteLine("|                                                     |");
+                Console.WriteLine("|  1 - Cadastrar Voo:                                 |");
+                Console.WriteLine("|  2 - Selecionar Voo Específico:                     |");
+                Console.WriteLine("|  3 - Exibir Lista de Voo(s):                        |");
+                Console.WriteLine("|  4 - Alterar dados de Voo:                          |");
+                Console.WriteLine("|_____________________________________________________|");
+                Console.WriteLine("|>>>>>>>>>>>>>>>>>>> MENU PASSAGENS <<<<<<<<<<<<<<<<<<|");
+                Console.WriteLine("|                                                     |");
+                Console.WriteLine("|  5 - Cadastrar Passagem:                            |");
+                Console.WriteLine("|  6 - Selecionar Passagem Específica:                |");
+                Console.WriteLine("|  7 - Exibir Lista de Passagem(s):                   |");
+                Console.WriteLine("|  8 - Alterar dados da Passagem:                     |");
+                Console.WriteLine("|_____________________________________________________|");
+                Console.WriteLine("|>>>>>>>>>>>>>>>>>>>>> MENU VENDAS <<<<<<<<<<<<<<<<<<<|");
+                Console.WriteLine("|                                                     |");
+                Console.WriteLine("|  9 - Registrar Venda:                               |");
+                Console.WriteLine("|  10- Selecionar Venda Específica:                   |");  
+                Console.WriteLine("|  11- Exibir Lista de Venda(s):                      |");
+                Console.WriteLine("|  12- Alterar dados da Venda:                        |");                
+                Console.WriteLine("|_____________________________________________________|");
+                Console.Write("Opção: ");
+                
+                try
+                {
+                    opcMenu = int.Parse(Console.ReadLine());
+                }
+                catch (Exception)
+                {
+
+                }
+                switch (opcMenu)
+                {
+                    case 0:
+                       MenuPrincipal();
+                        break;
+                    case 1:
                         Voo cdtvoo = new Voo();
                         cdtvoo.CadastroVoo();
                         break;
-                    case 14:
 
+                    case 2:
+                        Voo selvooesp = new Voo();
+                        selvooesp.LocalizarVoo();
                         break;
+
+                    case 3:
+                        Voo listvoo = new Voo();
+                        listvoo.ConsultarListaVoos(); 
+                        break;
+
+                    case 4:
+                        Voo editvoo = new Voo();
+                        editvoo.EditarVoo();
+                        break;
+
+                    case 5:
+                        Passagem cdtpassagem = new Passagem();
+                        cdtpassagem.CadastroPassagem();
+                        break;
+
+                    case 6:
+                        Passagem selpassagemesp = new Passagem();
+                        selpassagemesp.LocalizarPassagem();
+                        break;
+
+                    case 7:
+                        Passagem listpassagem = new Passagem();
+                        listpassagem.ConsultarListaPassagem(); 
+                        break;
+
+                    case 8:
+                        Passagem editpassagem = new Passagem();
+                       editpassagem.EditarPassagem(); 
+                        break;
+
+                    case 9:
+                        Venda cdtvenda = new Venda();
+                        cdtvenda.CadastroVenda();
+                        break;
+
+                    case 10:
+                        Venda selvendaesp = new Venda();
+                        selvendaesp.LocalizarVenda();
+                        break;
+                    case 11:
+                        Venda listvenda = new Venda();
+                        listvenda.ConsultarListaVendas();
+                        break;
+                    case 12:
+                        Venda editvenda = new Venda();
+                        editvenda.EditarVenda();
+                        break;                    
+
+
                 }
 
             } while (true);
 
         }
-
         static void Main(string[] args)
         {
             MenuPrincipal();
         }
+
     }
 }

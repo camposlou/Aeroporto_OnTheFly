@@ -21,7 +21,7 @@ namespace Aeroporto_OnTheFly
         public DateTime DataUltCompra { get; set; }
         public DateTime DataCadastro { get; set; }
 
-        public InternalControlDB banco;
+        InternalControlDB db = new InternalControlDB();                
 
         public Passageiro() { }
 
@@ -38,7 +38,7 @@ namespace Aeroporto_OnTheFly
         #region Insert Passageiro
         public void CadastroPassageiro()
         {
-            InternalControlDB db = new InternalControlDB();
+           
             Console.Clear();
             Console.WriteLine("\n\t>>>DIGITE AS INFORMAÇÕES DO PASSAGEIRO ABAIXO<<<:\n ");
 
@@ -171,8 +171,8 @@ namespace Aeroporto_OnTheFly
             if (opc == 1)
             {
                 String sql = $"SELECT CPF, Nome, Sexo, Data_Nascimento, Situacao, Data_UltimaCompra, Data_Cadastro From Passageiro WHERE CPF=('{this.CPF}');";
-                banco = new InternalControlDB();
-                banco.LocalizarDadoPassageiro(sql);
+                
+                db.LocalizarDadoPassageiro(sql);
 
                 Console.WriteLine("\nAperte ENTER para Retornar ao Menu.");
                 Console.ReadKey();
@@ -200,10 +200,9 @@ namespace Aeroporto_OnTheFly
             if (opc == 1)
             {
                 
-                String sql = $"SELECT CPF,Nome, Sexo, Data_Nascimento, Situacao, Data_UltimaCompra, Data_Cadastro  FROM Passageiro WHERE Situacao = 'A';";
-                banco = new InternalControlDB();
-                banco = new InternalControlDB();
-                banco.LocalizarDadoPassageiro(sql);
+                String sql = $"SELECT CPF,Nome, Sexo, Data_Nascimento, Situacao, Data_UltimaCompra, Data_Cadastro  FROM Passageiro";
+                
+                db.LocalizarDadoPassageiro(sql);
 
                 Console.WriteLine("\nAperte ENTER para retornar ao Menu.");
                 Console.ReadKey();
@@ -236,9 +235,9 @@ namespace Aeroporto_OnTheFly
             }
 
             sql = $"SELECT CPF,Nome, Sexo, Data_Nascimento, Situacao, Data_UltimaCompra, Data_Cadastro  FROM Passageiro WHERE CPF=('{this.CPF}');";
-            banco = new InternalControlDB();
+            db = new InternalControlDB();
            
-            if (!string.IsNullOrEmpty(banco.LocalizarDadoPassageiro(sql)))
+            if (!string.IsNullOrEmpty(db.LocalizarDadoPassageiro(sql)))
             {
                 Console.WriteLine("\nDeseja Efetuar a Alteração? Digite 1- Sim / 2- Não: ");
                 Console.Write("Digite: ");
@@ -287,8 +286,8 @@ namespace Aeroporto_OnTheFly
                     }
                     Console.WriteLine("\nCadastro alterado com sucesso!!!! Aperte ENTER para retornar ao Menu.");
                     Console.ReadKey();
-                    banco = new InternalControlDB();
-                    banco.EditarDado(sql);
+                   
+                    db.EditarDado(sql);
                 }
 
                 else
