@@ -17,8 +17,9 @@ namespace Aeroporto_OnTheFly
         public DateTime DataCadastro { get; set; }
         public char Situacao { get; set; }
 
-        public InternalControlDB banco;
+        InternalControlDB db = new();        
 
+        public CompanhiaAerea() { }
 
         public CompanhiaAerea(string cnpj, string razaoSocial, DateTime DataAbertura, DateTime DataUltvoo, DateTime DataCadastro, char Situacao)
         {
@@ -32,7 +33,7 @@ namespace Aeroporto_OnTheFly
         #region Insert Companhia Aerea
         public void CadastroCompanhiaAerea()
         {
-            InternalControlDB db = new InternalControlDB();
+            
             Console.Clear();
 
             Console.WriteLine("\n\t>>>DIGITE AS INFORMAÇÕES DA COMPANHIA AÉREA ABAIXO<<<:\n ");
@@ -94,6 +95,12 @@ namespace Aeroporto_OnTheFly
                     Console.WriteLine("Data de abertura não pode ser futura!");
                     validacao = true;
                 }
+                if (DataAbertura > DateTime.Now.AddMonths(-6))
+                {
+                    Console.WriteLine("Não é possível cadastrar empresas com menos de 6 meses!!!");
+                    Thread.Sleep(2000);
+                   validacao = true;
+                }
             } while (validacao);
 
             DataUltVoo = DateTime.Now;
@@ -118,13 +125,12 @@ namespace Aeroporto_OnTheFly
             if (opc == 1)
             {
                 string sql = $"INSERT INTO Companhia_Aerea  (CNPJ, Razao_Social, Data_Abertura, Situacao, Data_Cadastro, Data_UltimoVoo) VALUES ('{this.CNPJ}' , " +
-                     $"'{this.RazaoSocial}', '{this.DataAbertura}', '{this.Situacao}', '{this.DataCadastro}', '{this.DataUltVoo}');";
-                banco = new InternalControlDB();
-                banco.InserirDado(sql);
+                     $"'{this.RazaoSocial}', '{this.DataAbertura}', '{this.Situacao}', '{this.DataCadastro}', '{this.DataUltVoo.ToString("dd/MM/yyyy HH:mm")}');";
+               
+                db.InserirDado(sql);
 
                 Console.WriteLine("\nGravação efetuada com sucesso! Aperte ENTER para retornar ao Menu.");
                 Console.ReadKey();
-
             }
             else
             {
@@ -158,8 +164,8 @@ namespace Aeroporto_OnTheFly
             if (opc == 1)
             {
                 String sql = $"SELECT CNPJ, Razao_Social, Data_Abertura, Situacao, Data_Cadastro, Data_UltimoVoo From Companhia_Aerea WHERE CNPJ=('{this.CNPJ}');";
-                banco = new InternalControlDB();
-                banco.LocalizarDadoCompanhia(sql);
+              
+                db.LocalizarDadoCompanhia(sql);
 
                 Console.WriteLine("\nAperte ENTER para Retornar ao Menu.");
                 Console.ReadKey();
@@ -187,10 +193,9 @@ namespace Aeroporto_OnTheFly
             if (opc == 1)
             {
 
-                String sql = $"SELECT CNPJ, Razao_Social, Data_Abertura, Situacao, Data_Cadastro, Data_UltimoVoo From Companhia_Aerea WHERE CNPJ=('{this.CNPJ}');";
-                banco = new InternalControlDB();
-                banco = new InternalControlDB();
-                banco.LocalizarDadoCompanhia(sql);
+                String sql = $"SELECT CNPJ, Razao_Social, Data_Abertura, Situacao, Data_Cadastro, Data_UltimoVoo From Companhia_Aerea";
+               
+                db.LocalizarDadoCompanhia(sql);
 
                 Console.WriteLine("\nAperte ENTER para retornar ao Menu.");
                 Console.ReadKey();
@@ -223,9 +228,9 @@ namespace Aeroporto_OnTheFly
             }
 
             sql = $"SELECT CNPJ, Razao_Social, Data_Abertura, Situacao, Data_Cadastro, Data_UltimoVoo From Companhia_Aerea WHERE CNPJ=('{this.CNPJ}');";
-            banco = new InternalControlDB();
+            db = new InternalControlDB();
 
-            if (!string.IsNullOrEmpty(banco.LocalizarDadoCompanhia(sql)))
+            if (!string.IsNullOrEmpty(db.LocalizarDadoCompanhia(sql)))
             {
                 Console.WriteLine("\nDeseja Efetuar a Alteração? Digite 1- Sim / 2- Não: ");
                 Console.Write("Digite: ");
@@ -257,7 +262,7 @@ namespace Aeroporto_OnTheFly
                         case 2:
                             Console.Write("\nAlterar a Data de Abertura para: ");
                             this.DataAbertura = DateTime.Parse(Console.ReadLine());
-                            sql = $"Update Companhia_Aerea Set Data_Abertura=('{this.DataAbertura}') Where CPF=('{this.CNPJ}');";
+                            sql = $"Update Companhia_Aerea Set Data_Abertura=('{this.DataAbertura}') Where CNPJ=('{this.CNPJ}');";
                             break;
                         case 3:
                             Console.WriteLine("\nSituação Atual: ");
@@ -270,8 +275,8 @@ namespace Aeroporto_OnTheFly
                     }
                     Console.WriteLine("\nCadastro alterado com sucesso!!!! Aperte ENTER para retornar ao Menu.");
                     Console.ReadKey();
-                    banco = new InternalControlDB();
-                    banco.EditarDado(sql);
+                    db = new InternalControlDB();
+                    db.EditarDado(sql);
                 }
 
                 else
@@ -287,9 +292,6 @@ namespace Aeroporto_OnTheFly
             }
         }
         #endregion
-
-
-
 
         public bool ValidarCNPJ(string vrCNPJ)
         {

@@ -21,11 +21,9 @@ namespace Aeroporto_OnTheFly
         public DateTime DataUltCompra { get; set; }
         public DateTime DataCadastro { get; set; }
 
-        public InternalControlDB banco;
+        InternalControlDB db = new InternalControlDB();                
 
         public Passageiro() { }
-
-
 
         public Passageiro(string cpf, string nome, char sexo, DateTime dataNascimento, char Situacao, DateTime dataUltCompra, DateTime dataCadastro)
         {
@@ -36,13 +34,11 @@ namespace Aeroporto_OnTheFly
             this.Situacao = Situacao;
             this.DataUltCompra = dataUltCompra;
             this.DataCadastro = dataCadastro;
-
-
         }
         #region Insert Passageiro
         public void CadastroPassageiro()
         {
-            InternalControlDB db = new InternalControlDB();
+           
             Console.Clear();
             Console.WriteLine("\n\t>>>DIGITE AS INFORMAÇÕES DO PASSAGEIRO ABAIXO<<<:\n ");
 
@@ -64,7 +60,6 @@ namespace Aeroporto_OnTheFly
                     Console.ReadKey();
                     CPF = "";
                 }
-
 
             } while (!ValidarCPF(CPF));
 
@@ -139,21 +134,17 @@ namespace Aeroporto_OnTheFly
             {
                 string sql = $"INSERT INTO Passageiro (CPF, Nome, Sexo, Data_Nascimento, Situacao, Data_UltimaCompra, Data_Cadastro) VALUES ('{this.CPF}' , " +
                      $"'{this.Nome}', '{this.Sexo}', '{this.DataNasc}', '{this.Situacao}', '{this.DataUltCompra}', '{this.DataCadastro}');";
-                banco = new InternalControlDB();
-                banco.InserirDado(sql);
+                db.InserirDado(sql);
 
                 Console.WriteLine("\nGravação efetuada com sucesso! Aperte ENTER para retornar ao Menu.");
                 Console.ReadKey();
-
             }
             else
             {
                 Console.WriteLine("\nGravação não efetuada! Aperte ENTER para retornar ao Menu.");
                 Console.ReadKey();
-
             }
-            #endregion
-           
+            #endregion          
 
         }
         #endregion
@@ -180,8 +171,8 @@ namespace Aeroporto_OnTheFly
             if (opc == 1)
             {
                 String sql = $"SELECT CPF, Nome, Sexo, Data_Nascimento, Situacao, Data_UltimaCompra, Data_Cadastro From Passageiro WHERE CPF=('{this.CPF}');";
-                banco = new InternalControlDB();
-                banco.LocalizarDadoPassageiro(sql);
+                
+                db.LocalizarDadoPassageiro(sql);
 
                 Console.WriteLine("\nAperte ENTER para Retornar ao Menu.");
                 Console.ReadKey();
@@ -210,9 +201,8 @@ namespace Aeroporto_OnTheFly
             {
                 
                 String sql = $"SELECT CPF,Nome, Sexo, Data_Nascimento, Situacao, Data_UltimaCompra, Data_Cadastro  FROM Passageiro";
-                banco = new InternalControlDB();
-                banco = new InternalControlDB();
-                banco.LocalizarDadoPassageiro(sql);
+                
+                db.LocalizarDadoPassageiro(sql);
 
                 Console.WriteLine("\nAperte ENTER para retornar ao Menu.");
                 Console.ReadKey();
@@ -245,9 +235,9 @@ namespace Aeroporto_OnTheFly
             }
 
             sql = $"SELECT CPF,Nome, Sexo, Data_Nascimento, Situacao, Data_UltimaCompra, Data_Cadastro  FROM Passageiro WHERE CPF=('{this.CPF}');";
-            banco = new InternalControlDB();
+            db = new InternalControlDB();
            
-            if (!string.IsNullOrEmpty(banco.LocalizarDadoPassageiro(sql)))
+            if (!string.IsNullOrEmpty(db.LocalizarDadoPassageiro(sql)))
             {
                 Console.WriteLine("\nDeseja Efetuar a Alteração? Digite 1- Sim / 2- Não: ");
                 Console.Write("Digite: ");
@@ -296,8 +286,8 @@ namespace Aeroporto_OnTheFly
                     }
                     Console.WriteLine("\nCadastro alterado com sucesso!!!! Aperte ENTER para retornar ao Menu.");
                     Console.ReadKey();
-                    banco = new InternalControlDB();
-                    banco.EditarDado(sql);
+                   
+                    db.EditarDado(sql);
                 }
 
                 else
