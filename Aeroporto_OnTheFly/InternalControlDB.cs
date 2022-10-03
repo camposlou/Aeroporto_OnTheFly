@@ -9,7 +9,7 @@ namespace Aeroporto_OnTheFly
 {
     internal class InternalControlDB
     {
-        private static string Conexao = "Data Source=localhost; Initial Catalog=Aeroporto_OnTheFly; User Id=sa; Password=MiliBe1@;";
+        private static string Conexao = "Data Source=localhost; Initial Catalog=Aeroporto_OnTheFly; User Id=sa; Password=******;";
         private static SqlConnection Conecta = new SqlConnection(Conexao);
 
 
